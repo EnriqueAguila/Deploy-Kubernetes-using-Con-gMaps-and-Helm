@@ -1,0 +1,31 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: frontend
+  namespace: kikis
+  labels:
+    role: frontend
+    env: demo
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      role: frontend
+  template:
+    metadata:
+      labels:
+        role: frontend
+    spec:
+      containers:
+      #CODE2.0:
+      #add the NGINX container to the pod - configure it to mount the nginx.conf file stored in the nginx-conf configMap 
+      - name: nginx
+
+      #CODE2.1:
+      #add the FLASK container to the pod
+      - name: flask
+
+      volumes:
+      #CODE2.2:
+      #reference the nginx-conf configMap - this will be mounted into the NGINX container
+      - name: nginx-proxy-config

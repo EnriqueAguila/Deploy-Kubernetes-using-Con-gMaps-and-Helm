@@ -1,0 +1,48 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: frontend
+  namespace: kiks
+  labels:
+    role: frontend
+    env: demo
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      role: frontend
+  template:
+    metadata:
+      labels:
+        role: frontend
+    spec:
+      containers:
+      #CODE2.0:
+      #add the NGINX container to the pod - configure it to mount the nginx.conf file stored in the nginx-conf configMap 
+      - name: nginx
+        image: nginx:1.13.7
+        imagePullPolicy: IfNotPresent
+        ports:
+        - name: http
+          containerPort: 80
+        volumeMounts:
+        - name: nginx-proxy-config
+          mountPath: /etc/nginx/conf.d/default.conf
+          subPath: nginx.conf
+      #CODE2.1:
+      #add the FLASK container to the pod
+      - name: flask
+        image: kikisdevops/flaskapp
+        imagePullPolicy: IfNotPresent
+        ports:
+        - name: http
+          containerPort: 5000
+        env:
+        - name: APP_NAME
+          value: kiks.DevOps.K8s.Manifest
+      volumes:
+      #CODE2.2:
+      #reference the nginx-conf configMap - this will be mounted into the NGINX container
+      - name: nginx-proxy-config
+        configMap:
+          name: nginx-conf

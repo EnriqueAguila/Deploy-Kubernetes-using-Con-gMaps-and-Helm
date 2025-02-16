@@ -229,25 +229,21 @@ Antes de instalar el nuevo gráﬁco, invierta (elimine) todos los recursos desp
 
 helm template cloudacademy -f ./app/values.prod.yaml ./app | kubectl delete -f -
 
+Instale el nuevo gráﬁco. En el terminal ejecute el siguiente comando:
 
-    
+helm install cloudacademy-app app-0.1.0.tgz
 
+Enumere todas las versiones actuales de Helm para el contexto actual del espacio de nombres. En el terminal ejecute el siguiente comando:
 
+helm ls
 
+Muestre la implementación, el pod y los recursos de servicio que se crearon debido a la instalación del gráﬁco de Helm. En el terminal ejecute el siguiente comando:
 
+kubectl get deploy,pods,svc
 
+Pruebe el servicio cloudacademy-app enviándole una solicitud curl. En el terminal ejecute el siguiente comando:
 
+curl -i http://$CLOUDACADEMY_APP_IP
 
-
-
-
-
-
-
-
-
-
-
-
-
+La implementación consistió en un solo pod que contenía dos contenedores. El primer contenedor era un contenedor de servidor web NGINX que redirigía las solicitudes HTTP entrantes a un segundo contenedor que ejecutaba una aplicación web basada en FLASK, basada en la imagen de Docker que creó en el primer paso de laboratorio. Utilizamos yaml como archivo de valores para externalizar variables de tiempo de ejecución, asegurándose de que sus plantillas de Helm sean reutilizables en diferentes entornos, en este caso entornos dev y prod, a través de los archivos values.dev.yaml y values.prod.yaml respectivamente. 
 

@@ -247,3 +247,6 @@ curl -i http://$CLOUDACADEMY_APP_IP
 
 La implementación consistió en un solo pod que contenía dos contenedores. El primer contenedor era un contenedor de servidor web NGINX que redirigía las solicitudes HTTP entrantes a un segundo contenedor que ejecutaba una aplicación web basada en FLASK, basada en la imagen de Docker que creó en el primer paso de laboratorio. Utilizamos yaml como archivo de valores para externalizar variables de tiempo de ejecución, asegurándose de que sus plantillas de Helm sean reutilizables en diferentes entornos, en este caso entornos dev y prod, a través de los archivos values.dev.yaml y values.prod.yaml respectivamente. 
 
+### Code of conduct
+
+Participation in the Helm community is governed by the [Code of Conduct](code-of-conduct.md).

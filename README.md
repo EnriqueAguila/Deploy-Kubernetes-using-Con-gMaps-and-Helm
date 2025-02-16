@@ -1,7 +1,7 @@
-### Deploy-Kubernetes-using-Con-gMaps-and-Helm
+## Deploy-Kubernetes-using-Con-gMaps-and-Helm
 #Creating well-structured, declarative, and reusable deployments within Kubernetes is an essential skill that increases productivity, using a manifest file, which is used to declare cluster resources, along with Helm (v3), which can be used to template the manifests.
 
-#First of all, I thank Cloud Academy for teaching these topics: https://www.qa.com/
+First of all, I thank Cloud Academy for teaching these topics: https://www.qa.com/
 
 ## Qué Vamos a implementar:
 Una aplicación en un clúster de Kubernetes utilizando:
@@ -21,7 +21,7 @@ Para grabar
 •	Helm : Para definir e instalar aplicaciones en Kubernetes de manera eficiente.
 
 ### Paso 1 
-##Se conﬁgurará un contenedor de servidor web NGINX para redirigir las solicitudes HTTP entrantes en sentido descendente a otro contenedor que ejecute una aplicación web personalizada basada en FLASK. El contenedor del servidor web NGINX utilizará la imagen nginx:1.13.7 disponible públicamente. El contenedor de la aplicación web basado en FLASK se basará en una imagen de Docker personalizada que primero deberá crear.
+Se conﬁgurará un contenedor de servidor web NGINX para redirigir las solicitudes HTTP entrantes en sentido descendente a otro contenedor que ejecute una aplicación web personalizada basada en FLASK. El contenedor del servidor web NGINX utilizará la imagen nginx:1.13.7 disponible públicamente. El contenedor de la aplicación web basado en FLASK se basará en una imagen de Docker personalizada que primero deberá crear.
 
 a-Conexión al puerto IDE 8080 de contenedores basados en web 
 

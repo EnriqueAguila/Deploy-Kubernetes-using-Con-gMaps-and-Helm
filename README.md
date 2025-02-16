@@ -1,10 +1,12 @@
-# Deploy-Kubernetes-using-Con-gMaps-and-Helm
-Creating well-structured, declarative, and reusable deployments within Kubernetes is an essential skill that increases productivity, using a manifest file, which is used to declare cluster resources, along with Helm (v3), which can be used to template the manifests.
+## Deploy-Kubernetes-using-Con-gMaps-and-Helm
+#Creating well-structured, declarative, and reusable deployments within Kubernetes is an essential skill that increases productivity, using a manifest file, which is used to declare cluster resources, along with Helm (v3), which can be used to template the manifests.
 
-Qué Vamos a implementar:
+# First of all, I thank Cloud Academy for teaching these topics: https://www.qa.com/
+
+## Qué Vamos a implementar:
 Una aplicación en un clúster de Kubernetes utilizando:
-1.	ConfigMaps : Para gestionar los ajustes de la aplicación (por ejemplo, variables de entorno, configuraciones).
-2.	Helm : Como administrador de paquetes para definir, instalar y gestionar la aplicación de manera declarativa.
+a.	ConfigMaps : Para gestionar los ajustes de la aplicación (por ejemplo, variables de entorno, configuraciones).
+b.	Helm : Como administrador de paquetes para definir, instalar y gestionar la aplicación de manera declarativa.
 Instalar el Chart en Kubernetes :
 •	Utilice Helm para instalar la aplicación en el clúster.
 Verificar y Gestionar :
@@ -18,19 +20,22 @@ Para grabar
 •	ConfigMaps : Para configuración.
 •	Helm : Para definir e instalar aplicaciones en Kubernetes de manera eficiente.
 
-Se conﬁgurará un contenedor de servidor web NGINX para redirigir las solicitudes HTTP entrantes en sentido descendente a otro contenedor que ejecute una aplicación web personalizada basada en FLASK. El contenedor del servidor web NGINX utilizará la imagen nginx:1.13.7 disponible públicamente. El contenedor de la aplicación web basado en FLASK se basará en una imagen de Docker personalizada que primero deberá crear.
+### Paso 1 
+##Se conﬁgurará un contenedor de servidor web NGINX para redirigir las solicitudes HTTP entrantes en sentido descendente a otro contenedor que ejecute una aplicación web personalizada basada en FLASK. El contenedor del servidor web NGINX utilizará la imagen nginx:1.13.7 disponible públicamente. El contenedor de la aplicación web basado en FLASK se basará en una imagen de Docker personalizada que primero deberá crear.
 
-1-Conexión al puerto IDE 8080 de contenedores basados en web 
+a-Conexión al puerto IDE 8080 de contenedores basados en web 
 
-2-Realizar la compilación de imágenes y crear espacio de nombres
+b-Realizar la compilación de imágenes y crear espacio de nombres
 
-2-En este paso creará una imagen de Docker personalizada que contiene un archivo MATRAZ
+### Paso 2
+##En este paso creará una imagen de Docker personalizada que contiene un archivo MATRAZ
 Aplicación web basada. La imagen de Docker personalizada se implementará más adelante en el clúster de Kubernetes. Antes de realizar la implementación dentro del clúster, se le
 mostrará cómo crear un nuevo recurso de espacio de nombres y cómo establecerlo como el espacio de nombres predeterminado en el que se lleva a cabo la implementación restante.
 Enumera el contenido del directorio ﬂaskapp. En el terminal ejecute el siguiente comando:
 ls -la
 
-3-Realice una compilación de Docker para crear una imagen de Docker personalizada. En el terminal ejecute el siguiente comando:
+### Paso 3
+##Realice una compilación de Docker para crear una imagen de Docker personalizada. En el terminal ejecute el siguiente comando:
 docker build -t cloudacademydevops/flaskapp .
 
 

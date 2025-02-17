@@ -29,56 +29,56 @@ a-Conexión al puerto IDE 8080 de contenedores basados en web
 b-Realizar la compilación de imágenes y crear espacio de nombres
 
 # Paso 2
-### En este paso creará una imagen de Docker personalizada que contiene un archivo MATRAZ.
-### Aplicación web basada. La imagen de Docker personalizada se implementará más adelante en el clúster de Kubernetes. Antes de realizar la implementación dentro del clúster, se le mostrará cómo crear un nuevo recurso de espacio de nombres y cómo establecerlo como el espacio de nombres predeterminado en el que se lleva a cabo la implementación restante. Enumera el contenido del directorio ﬂaskapp. En el terminal ejecute el siguiente comando:
+En este paso creará una imagen de Docker personalizada que contiene un archivo MATRAZ.
+Aplicación web basada. La imagen de Docker personalizada se implementará más adelante en el clúster de Kubernetes. Antes de realizar la implementación dentro del clúster, se le mostrará cómo crear un nuevo recurso de espacio de nombres y cómo establecerlo como el espacio de nombres predeterminado en el que se lleva a cabo la implementación restante. Enumera el contenido del directorio ﬂaskapp. En el terminal ejecute el siguiente comando:
 
-´
+```
 ls -la
-´
+```
 
 # Paso 3
 Realice una compilación de Docker para crear una imagen de Docker personalizada. En el terminal ejecute el siguiente comando:
 
-´
+```
 docker build -t cloudacademydevops/flaskapp .
-´
+```
 
-### comprobar ebe la presencia de la imagen de Docker recién creada. En el terminal ejecute el siguiente comando:
+Comprobar ebe la presencia de la imagen de Docker recién creada. En el terminal ejecute el siguiente comando:
 
-´
+```
 docker images
-´
+```
 
 Cree un espacio de nombres personalizado de cloudacademy dentro del clúster de Kubernetes. En el terminal ejecute el siguiente comando:
 
-´
+```
 kubectl create ns cloudacademy
-´
+```
 
 Cambie al nuevo espacio de nombres cloudacademy. En el terminal ejecute el siguiente comando:
 
-´
+```
 kubectl config set-context --current --namespace=cloudacademy
-´
+```
 
 # Paso 4 Aplicar Nginx ConﬁgMap
 
 Los ConﬁgMaps permiten desacoplar los artefactos de conﬁguración del contenido de la imagen para mantener la portabilidad de las aplicaciones en contenedores.
 Cambie al directorio k8s y enumere su contenido. En el terminal ejecute el siguiente comando:
 
-´
+```
 cd ../k8s && ls -la
-´
+```
 
 ## Ya en este repo se encuentra el archivo actualizado de el archivo de maniﬁesto nginx.conﬁgmap.yaml 
 Aplique el archivo nginx.conﬁgmap.yaml actualizado en el clúster K8s: esto creará un nuevo recurso ConﬁgMap. En el terminal ejecute el siguiente comando:
-´
+```
 kubectl apply -f nginx.configmap.yaml
-´
+```
 Enumere todos los recursos de ConﬁgMap en el clúster K8s. En el terminal ejecute el siguiente comando:
-´
+```
 kubectl get configmaps
-´
+```
 ## A este paso ya actualizó, guardó y aplicó el archivo de maniﬁesto
 nginx.conﬁgmap.yaml en el clúster K8s. Esto creó un nuevo ConﬁgMap que contenía la conﬁguración de NGINX que se montará en el contenedor NGINX 
 
@@ -90,73 +90,75 @@ Las implementaciones representan un conjunto de varios pods idénticos y tienen 
 
 Vamos a aplicar el archivo deployment.yaml actualizado en el clúster K8s, esto creará un nuevo archivo Despliegue.
 En el terminal ejecute el siguiente comando:
-´
+```
 kubectl apply -f deployment.yaml
-´
+```
+
 Vamos a numerar todas las implementaciones en el clúster K8s. En el terminal ejecute el siguiente comando:
-´
+```
 kubectl get deploy
-´
+```
+
 Enumere todos los pods del grupo K8s. En el terminal ejecute el siguiente comando:
-´
+```
 kubectl get pods
-´
+```
 Extraiga el nombre del pod de frontend y guárdelo en una variable llamada POD_NAME. Hazlo eco de vuelta a la terminal. En el terminal ejecute los siguientes comandos:
-´
+```
 POD_NAME=`kubectl get pods -o jsonpath='{.items[0].metadata.name}'`echo$POD_NAME
-´
+```
 Ahora use el comando kubectl describe para obtener un informe detallado sobre el estado actual del pod de frontend. En el terminal ejecute el siguiente comando:
-´
+```
 kubectl describe pod $POD_NAME
-´
+```
 Utilice el comando docker images para conﬁrmar la etiqueta de imagen de Docker correcta para la aplicación web basada en FLASK que creó en el paso 1 del laboratorio. En el terminal ejecute el siguiente comando:
-´
+```
 docker images | grep cloudacademydevops
-´
+```
 Enumere todos los recursos de implementación en el clúster K8s. En el terminal ejecute el siguiente comando:
-´
+```
 kubectl get deploy
-´
+```
 Exponga la implementación de frontend. Esto creará un nuevo Servicio que permitirá llamar a los pods de frontend a través de una dirección VIP de red de clúster estable. En el terminal ejecute el siguiente comando:
-´
+```
 kubectl expose deployment frontend --port=80 --target-port=80
-´
+```
 Enumere el nuevo recurso de servicio frontend creado anteriormente. En el terminal ejecute el siguiente comando:
-´
+```
 kubectl get svc frontend
-´
+```
 Extraiga la dirección IP del clúster de servicios frontend y almacénela en una variable llamada FRONTEND_SERVICE_IP. Hazlo eco de vuelta a la terminal. En el terminal ejecute los siguientes comandos:
-´
+```
 FRONTEND_SERVICE_IP=`kubectl get service/frontend -o jsonpath='{.spec.clusterIP}'` echo$FRONTEND_SERVICE_IP
-´
+```
 Pruebe el servicio de frontend enviándole una solicitud de curl. En el terminal ejecute el siguiente comando:
-´
+```
 curl -i http://$FRONTEND_SERVICE_IP
-´
+```
 Vuelva a probar el servicio de frontend enviándole una nueva solicitud curl. En el terminal ejecute el siguiente comando:
-´
+```
 curl -i http://$FRONTEND_SERVICE_IP
-´
+```
 Examinemos ahora los registros asociados con el envío de tráﬁco a través del servidor web NGINX. Para empezar, enumere los pods actuales dentro del clúster. En el terminal ejecute el siguiente comando:
-´
+```
 kubectl get pods
-´
+```
 Extraiga el nombre del pod de frontend y guárdelo en una variable llamada FRONTEND_POD_NAME. Hazlo eco de vuelta a la terminal. En el terminal ejecute los siguientes comandos:
-´
+```
 FRONTEND_POD_NAME=`kubectl get pods --no-headers -o custom-columns=":metadata.name"` echo$FRONTEND_POD_NAME
-´
+```
 Realice una lista de directorios directamente dentro del contenedor NGINX enumerando el contenido del directorio /var/log/nginx. En el terminal ejecute el siguiente comando:
-´
+```
 kubectl exec -it $FRONTEND_POD_NAME -c nginx -- ls -la /var/log/nginx/
-´
+```
 Utilice el comando kubectl logs para examinar el registro NGINX generado por los comandos curl ejecutados anteriormente. En el terminal ejecute el siguiente comando:
-´
+```
 kubectl logs $FRONTEND_POD_NAME nginx
-´
+```
 Utilice el comando kubectl logs para examinar el registro FLASK generado por los comandos curl ejecutados anteriormente. En el terminal ejecute el siguiente comando:
-´
+```
 kubectl logs $FRONTEND_POD_NAME flask
-´
+```
 
 # Paso 6 Crear proyecto de Helm
 

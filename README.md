@@ -5,7 +5,7 @@ Creating well-structured, declarative, and reusable deployments within Kubernete
 
 First of all, I thank Cloud Academy for teaching these topics: https://www.qa.com/
 
-## Qué Vamos a implementar:
+### Qué Vamos a implementar:
 Una aplicación en un clúster de Kubernetes utilizando:
 a.	ConfigMaps : Para gestionar los ajustes de la aplicación (por ejemplo, variables de entorno, configuraciones).
 b.	Helm : Como administrador de paquetes para definir, instalar y gestionar la aplicación de manera declarativa.
@@ -22,53 +22,55 @@ Para grabar
 •	ConfigMaps : Para configuración.
 •	Helm : Para definir e instalar aplicaciones en Kubernetes de manera eficiente.
 
-### Paso 1 
+# Paso 1 
 Se conﬁgurará un contenedor de servidor web NGINX para redirigir las solicitudes HTTP entrantes en sentido descendente a otro contenedor que ejecute una aplicación web personalizada basada en FLASK. El contenedor del servidor web NGINX utilizará la imagen nginx:1.13.7 disponible públicamente. El contenedor de la aplicación web basado en FLASK se basará en una imagen de Docker personalizada que primero deberá crear.
 
 a-Conexión al puerto IDE 8080 de contenedores basados en web 
-
 b-Realizar la compilación de imágenes y crear espacio de nombres
 
-### Paso 2
-En este paso creará una imagen de Docker personalizada que contiene un archivo MATRAZ
-Aplicación web basada. La imagen de Docker personalizada se implementará más adelante en el clúster de Kubernetes. Antes de realizar la implementación dentro del clúster, se le
-mostrará cómo crear un nuevo recurso de espacio de nombres y cómo establecerlo como el espacio de nombres predeterminado en el que se lleva a cabo la implementación restante.
-Enumera el contenido del directorio ﬂaskapp. En el terminal ejecute el siguiente comando:
+# Paso 2
+### En este paso creará una imagen de Docker personalizada que contiene un archivo MATRAZ.
+### Aplicación web basada. La imagen de Docker personalizada se implementará más adelante en el clúster de Kubernetes. Antes de realizar la implementación dentro del clúster, se le mostrará cómo crear un nuevo recurso de espacio de nombres y cómo establecerlo como el espacio de nombres predeterminado en el que se lleva a cabo la implementación restante. Enumera el contenido del directorio ﬂaskapp. En el terminal ejecute el siguiente comando:
+
 ´
 ls -la
 ´
 
-### Paso 3
+# Paso 3
 Realice una compilación de Docker para crear una imagen de Docker personalizada. En el terminal ejecute el siguiente comando:
+
 ´
 docker build -t cloudacademydevops/flaskapp .
 ´
 
-comprobar ebe la presencia de la imagen de Docker recién creada. En el terminal ejecute el siguiente comando:
+### comprobar ebe la presencia de la imagen de Docker recién creada. En el terminal ejecute el siguiente comando:
+
 ´
 docker images
 ´
 
 Cree un espacio de nombres personalizado de cloudacademy dentro del clúster de Kubernetes. En el terminal ejecute el siguiente comando:
+
 ´
 kubectl create ns cloudacademy
 ´
+
 Cambie al nuevo espacio de nombres cloudacademy. En el terminal ejecute el siguiente comando:
+
 ´
 kubectl config set-context --current --namespace=cloudacademy
 ´
 
-### Paso 4 Aplicar Nginx ConﬁgMap
+# Paso 4 Aplicar Nginx ConﬁgMap
 
-Los ConﬁgMaps permiten desacoplar los artefactos de
-conﬁguración del contenido de la imagen para mantener la portabilidad de las aplicaciones en contenedores.
-
+Los ConﬁgMaps permiten desacoplar los artefactos de conﬁguración del contenido de la imagen para mantener la portabilidad de las aplicaciones en contenedores.
 Cambie al directorio k8s y enumere su contenido. En el terminal ejecute el siguiente comando:
+
 ´
 cd ../k8s && ls -la
 ´
 
-# Ya en este repo se encuentra el archivo actualizado de el archivo de maniﬁesto nginx.conﬁgmap.yaml 
+## Ya en este repo se encuentra el archivo actualizado de el archivo de maniﬁesto nginx.conﬁgmap.yaml 
 Aplique el archivo nginx.conﬁgmap.yaml actualizado en el clúster K8s: esto creará un nuevo recurso ConﬁgMap. En el terminal ejecute el siguiente comando:
 ´
 kubectl apply -f nginx.configmap.yaml
@@ -77,14 +79,14 @@ Enumere todos los recursos de ConﬁgMap en el clúster K8s. En el terminal ejec
 ´
 kubectl get configmaps
 ´
-# A este paso ya actualizó, guardó y aplicó el archivo de maniﬁesto
+## A este paso ya actualizó, guardó y aplicó el archivo de maniﬁesto
 nginx.conﬁgmap.yaml en el clúster K8s. Esto creó un nuevo ConﬁgMap que contenía la conﬁguración de NGINX que se montará en el contenedor NGINX 
 
-### Paso 5 Aplicar implementación
+# Paso 5 Aplicar implementación
 
 Las implementaciones representan un conjunto de varios pods idénticos y tienen la capacidad de reemplazar automáticamente las instancias que fallan o que no responden.
 
-# En este repo ya se encuentra actualizado el archivo de maniﬁesto deployment.yaml
+## En este repo ya se encuentra actualizado el archivo de maniﬁesto deployment.yaml
 
 Vamos a aplicar el archivo deployment.yaml actualizado en el clúster K8s, esto creará un nuevo archivo Despliegue.
 En el terminal ejecute el siguiente comando:
@@ -156,7 +158,7 @@ Utilice el comando kubectl logs para examinar el registro FLASK generado por los
 kubectl logs $FRONTEND_POD_NAME flask
 ´
 
-### Paso 6 Crear proyecto de Helm
+# Paso 6 Crear proyecto de Helm
 
 Para empezar, navegue hacia arriba en un directorio hasta el directorio:
 ´
@@ -176,7 +178,7 @@ helm template test-app/
 ´
 En este paso, aprendió a usar el método Helm
 
-### Paso 7 Actualización de la implementación para usar plantillas de Helm
+# Paso 7 Actualización de la implementación para usar plantillas de Helm
 
 #En este escenario, el gráﬁco de Helm de la aplicación proporcionado se ha conﬁgurado para crear una implementación que inicia un solo pod que contiene dos contenedores. El primer contenedor es un contenedor de servidor web NGINX que envía las solicitudes HTTP entrantes a un segundo contenedor que ejecuta una aplicación web basada en FLASK (basada en la imagen de Docker que creó anteriormente). 
 
@@ -184,7 +186,7 @@ Comience por eliminar todos los recursos anteriores iniciados dentro del clúste
 ´
 kubectl delete deploy,pods,svc --all
 ´
-# En este repo ya estan modificados el archivo values.yaml de Helm y el archivo de deployment.yaml 
+## En este repo ya estan modificados el archivo values.yaml de Helm y el archivo de deployment.yaml 
 
 Utilice el comando helm template para generar un archivo de maniﬁesto desplegable. En el terminal ejecute el siguiente comando:
 ´
@@ -261,6 +263,6 @@ curl -i http://$CLOUDACADEMY_APP_IP
 
 La implementación consistió en un solo pod que contenía dos contenedores. El primer contenedor era un contenedor de servidor web NGINX que redirigía las solicitudes HTTP entrantes a un segundo contenedor que ejecutaba una aplicación web basada en FLASK, basada en la imagen de Docker que creó en el primer paso de laboratorio. Utilizamos yaml como archivo de valores para externalizar variables de tiempo de ejecución, asegurándose de que sus plantillas de Helm sean reutilizables en diferentes entornos, en este caso entornos dev y prod, a través de los archivos values.dev.yaml y values.prod.yaml respectivamente. 
 
-### Code of conduct
+## Code of conduct
 
 Participation in the Helm community is governed by the [Code of Conduct](code-of-conduct.md).

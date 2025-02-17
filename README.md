@@ -258,7 +258,7 @@ Show the deployment, pod, and service resources that were created due to the Hel
 ```
 kubectl get deploy,pods,svc
 ```
-Test the cloudacademy-app service by sending a curl request to it. In the terminal run the following command:
+Test the kikis-app service by sending a curl request to it. In the terminal run the following command:
 ```
 curl -i http://$KIKIS_APP_IP
 ```

@@ -5,265 +5,265 @@ Creating well-structured, declarative, and reusable deployments within Kubernete
 
 First of all, I thank Cloud Academy for teaching these topics: https://www.qa.com/
 
-### Qué Vamos a implementar:
-Una aplicación en un clúster de Kubernetes utilizando:
-a.	ConfigMaps : Para gestionar los ajustes de la aplicación (por ejemplo, variables de entorno, configuraciones).
-b.	Helm : Como administrador de paquetes para definir, instalar y gestionar la aplicación de manera declarativa.
-Instalar el Chart en Kubernetes :
-•	Utilice Helm para instalar la aplicación en el clúster.
-Verificar y Gestionar :
-•	Comprobar el estado de la aplicación y su configuración.
-•	Actualizar o eliminar la implementación según sea necesario.
-Beneficios
-•	Gestión de configuración : ConfigMaps permite separar la configuración del código.
-•	Instalación y actualización simplificadas : Helm facilita la gestión de aplicaciones complejas en Kubernetes.
-•	Declarativa : Se define el estado deseado, y Kubernetes y Helm se encargan de alcanzarlo.
-Para grabar
-•	ConfigMaps : Para configuración.
-•	Helm : Para definir e instalar aplicaciones en Kubernetes de manera eficiente.
+### What we are going to implement:
+An application on a Kubernetes cluster using:
+a. ConfigMaps : To manage application settings (e.g. environment variables, configurations).
+b. Helm : As a package manager to declaratively define, install, and manage the application.
+Install Chart on Kubernetes :
+• Use Helm to install the application on the cluster.
+Verify and Manage :
+• Check the status of the application and its configuration.
+• Update or remove the deployment as needed.
+Benefits
+• Configuration management : ConfigMaps allows you to separate configuration from code.
+• Simplified installation and upgrade : Helm makes it easy to manage complex applications on Kubernetes.
+• Declarative : You define the desired state, and Kubernetes and Helm take care of getting there.
+For recording
+• ConfigMaps : For configuration.
+• Helm : To define and install applications on Kubernetes efficiently.
 
 # Paso 1 
-Se conﬁgurará un contenedor de servidor web NGINX para redirigir las solicitudes HTTP entrantes en sentido descendente a otro contenedor que ejecute una aplicación web personalizada basada en FLASK. El contenedor del servidor web NGINX utilizará la imagen nginx:1.13.7 disponible públicamente. El contenedor de la aplicación web basado en FLASK se basará en una imagen de Docker personalizada que primero deberá crear.
+An NGINX web server container will be configured to redirect incoming HTTP requests downstream to another container running a custom FLASK-based web application. The NGINX web server container will use the publicly available nginx:1.13.7 image. The FLASK-based web application container will be based on a custom Docker image that you will need to build first.
 
-a-Conexión al puerto IDE 8080 de contenedores basados en web 
-b-Realizar la compilación de imágenes y crear espacio de nombres
+a-Connect to IDE port 8080 of web-based containers
+b-Perform image compilation and create namespace
 
 # Paso 2
-En este paso creará una imagen de Docker personalizada que contiene un archivo MATRAZ.
-Aplicación web basada. La imagen de Docker personalizada se implementará más adelante en el clúster de Kubernetes. Antes de realizar la implementación dentro del clúster, se le mostrará cómo crear un nuevo recurso de espacio de nombres y cómo establecerlo como el espacio de nombres predeterminado en el que se lleva a cabo la implementación restante. Enumera el contenido del directorio ﬂaskapp. En el terminal ejecute el siguiente comando:
+In this step you will create a custom Docker image containing a ﬂaskapp file. Based on a web application, the custom Docker image will later be deployed to the Kubernetes cluster. Before you deploy within the cluster, you will be shown how to create a new namespace resource and how to set it as the default namespace in which the remaining deployment takes place. List the contents of the ﬂaskapp directory. In the terminal run the following command:
 
 ```
 ls -la
 ```
 
 # Paso 3
-Realice una compilación de Docker para crear una imagen de Docker personalizada. En el terminal ejecute el siguiente comando:
+Perform a Docker build to create a custom Docker image. In the terminal run the following command:
 
 ```
 docker build -t cloudacademydevops/flaskapp .
 ```
 
-Comprobar ebe la presencia de la imagen de Docker recién creada. En el terminal ejecute el siguiente comando:
+Check for the presence of the newly created Docker image. In the terminal run the following command:
 
 ```
 docker images
 ```
 
-Cree un espacio de nombres personalizado de cloudacademy dentro del clúster de Kubernetes. En el terminal ejecute el siguiente comando:
+Create a custom kikis namespace inside the Kubernetes cluster. In the terminal run the following command:
 
 ```
-kubectl create ns cloudacademy
+kubectl create ns kikis
 ```
 
-Cambie al nuevo espacio de nombres cloudacademy. En el terminal ejecute el siguiente comando:
+Switch to the new kikis namespace. In the terminal run the following command:
 
 ```
-kubectl config set-context --current --namespace=cloudacademy
+kubectl config set-context --current --namespace=kikis
 ```
 
 # Paso 4 Aplicar Nginx ConﬁgMap
 
-Los ConﬁgMaps permiten desacoplar los artefactos de conﬁguración del contenido de la imagen para mantener la portabilidad de las aplicaciones en contenedores.
-Cambie al directorio k8s y enumere su contenido. En el terminal ejecute el siguiente comando:
+ConfigMaps allow you to decouple configuration artifacts from image content to maintain portability of containerized applications.
+Change to the k8s directory and list its contents. In the terminal, run the following command:
 
 ```
 cd ../k8s && ls -la
 ```
 
-## Ya en este repo se encuentra el archivo actualizado de el archivo de maniﬁesto nginx.conﬁgmap.yaml 
-Aplique el archivo nginx.conﬁgmap.yaml actualizado en el clúster K8s: esto creará un nuevo recurso ConﬁgMap. En el terminal ejecute el siguiente comando:
+## The updated nginx.configmap.yaml manifest file is already in this repo.
+
+Apply the updated nginx.configmap.yaml file to the K8s cluster: this will create a new ConﬁgMap resource. In the terminal run the following command:
 ```
 kubectl apply -f nginx.configmap.yaml
 ```
-Enumere todos los recursos de ConﬁgMap en el clúster K8s. En el terminal ejecute el siguiente comando:
+List all ConfigMap resources in the K8s cluster. In the terminal run the following command:
 ```
 kubectl get configmaps
 ```
-## A este paso ya actualizó, guardó y aplicó el archivo de maniﬁesto
-nginx.conﬁgmap.yaml en el clúster K8s. Esto creó un nuevo ConﬁgMap que contenía la conﬁguración de NGINX que se montará en el contenedor NGINX 
+## At this step you have updated, saved, and applied the nginx.configmap.yaml manifest file to the K8s cluster. 
+This created a new ConfigMap containing the NGINX configuration that will be mounted in the NGINX container. 
 
 # Paso 5 Aplicar implementación
 
-Las implementaciones representan un conjunto de varios pods idénticos y tienen la capacidad de reemplazar automáticamente las instancias que fallan o que no responden.
+Deployments represent a set of multiple identical pods and have the ability to automatically replace instances that fail or become unresponsive.
 
-## En este repo ya se encuentra actualizado el archivo de maniﬁesto deployment.yaml
+## In this repo the deployment.yaml manifest file is already updated
 
-Vamos a aplicar el archivo deployment.yaml actualizado en el clúster K8s, esto creará un nuevo archivo Despliegue.
-En el terminal ejecute el siguiente comando:
+Let's apply the updated deployment.yaml file to the K8s cluster, this will create a new Deployment file.
+In the terminal run the following command:
 ```
 kubectl apply -f deployment.yaml
 ```
 
-Vamos a numerar todas las implementaciones en el clúster K8s. En el terminal ejecute el siguiente comando:
+Let's number all the deployments in the K8s cluster. In the terminal run the following command:
 ```
 kubectl get deploy
 ```
 
-Enumere todos los pods del grupo K8s. En el terminal ejecute el siguiente comando:
+List all the pods in the K8s cluster. In the terminal run the following command:
 ```
 kubectl get pods
 ```
-Extraiga el nombre del pod de frontend y guárdelo en una variable llamada POD_NAME. Hazlo eco de vuelta a la terminal. En el terminal ejecute los siguientes comandos:
+Extract the name of the frontend pod and store it in a variable called POD_NAME. Echo it back to the terminal. In the terminal run the following commands:
 ```
 POD_NAME=`kubectl get pods -o jsonpath='{.items[0].metadata.name}'`echo$POD_NAME
 ```
-Ahora use el comando kubectl describe para obtener un informe detallado sobre el estado actual del pod de frontend. En el terminal ejecute el siguiente comando:
+Now use the kubectl describe command to get a detailed report on the current status of the frontend pod. In the terminal run the following command:
 ```
 kubectl describe pod $POD_NAME
 ```
-Utilice el comando docker images para conﬁrmar la etiqueta de imagen de Docker correcta para la aplicación web basada en FLASK que creó en el paso 1 del laboratorio. En el terminal ejecute el siguiente comando:
+Use the docker images command to confirm the correct Docker image tag for the FLASK-based web application you created in step 1 of the lab. In the terminal, run the following command:
 ```
 docker images | grep cloudacademydevops
 ```
-Enumere todos los recursos de implementación en el clúster K8s. En el terminal ejecute el siguiente comando:
+List all deployment resources in the K8s cluster. In the terminal run the following command:
 ```
 kubectl get deploy
 ```
-Exponga la implementación de frontend. Esto creará un nuevo Servicio que permitirá llamar a los pods de frontend a través de una dirección VIP de red de clúster estable. En el terminal ejecute el siguiente comando:
+Expose the frontend deployment. This will create a new Service that will allow calling frontend pods through a stable cluster network VIP address. In the terminal run the following command:
 ```
 kubectl expose deployment frontend --port=80 --target-port=80
 ```
-Enumere el nuevo recurso de servicio frontend creado anteriormente. En el terminal ejecute el siguiente comando:
+List the new frontend service resource created above. In the terminal run the following command:
 ```
 kubectl get svc frontend
 ```
-Extraiga la dirección IP del clúster de servicios frontend y almacénela en una variable llamada FRONTEND_SERVICE_IP. Hazlo eco de vuelta a la terminal. En el terminal ejecute los siguientes comandos:
+Extract the IP address of the frontend service cluster and store it in a variable called FRONTEND_SERVICE_IP. Echo it back to the terminal. In the terminal run the following commands:
 ```
 FRONTEND_SERVICE_IP=`kubectl get service/frontend -o jsonpath='{.spec.clusterIP}'` echo$FRONTEND_SERVICE_IP
 ```
-Pruebe el servicio de frontend enviándole una solicitud de curl. En el terminal ejecute el siguiente comando:
+Test the frontend service by sending a curl request to it. In the terminal run the following command:
 ```
 curl -i http://$FRONTEND_SERVICE_IP
 ```
-Vuelva a probar el servicio de frontend enviándole una nueva solicitud curl. En el terminal ejecute el siguiente comando:
+Retest the frontend service by sending a new curl request to it. In the terminal run the following command:
 ```
 curl -i http://$FRONTEND_SERVICE_IP
 ```
-Examinemos ahora los registros asociados con el envío de tráﬁco a través del servidor web NGINX. Para empezar, enumere los pods actuales dentro del clúster. En el terminal ejecute el siguiente comando:
+Let’s now examine the logs associated with sending traffic through the NGINX web server. To start, list the current pods within the cluster. In the terminal, run the following command:
 ```
 kubectl get pods
 ```
-Extraiga el nombre del pod de frontend y guárdelo en una variable llamada FRONTEND_POD_NAME. Hazlo eco de vuelta a la terminal. En el terminal ejecute los siguientes comandos:
+Extract the name of the frontend pod and store it in a variable called FRONTEND_POD_NAME. Echo it back to the terminal. In the terminal run the following commands:
 ```
 FRONTEND_POD_NAME=`kubectl get pods --no-headers -o custom-columns=":metadata.name"` echo$FRONTEND_POD_NAME
 ```
-Realice una lista de directorios directamente dentro del contenedor NGINX enumerando el contenido del directorio /var/log/nginx. En el terminal ejecute el siguiente comando:
+Perform a directory listing directly inside the NGINX container by listing the contents of the /var/log/nginx directory. In the terminal run the following command:
 ```
 kubectl exec -it $FRONTEND_POD_NAME -c nginx -- ls -la /var/log/nginx/
 ```
-Utilice el comando kubectl logs para examinar el registro NGINX generado por los comandos curl ejecutados anteriormente. En el terminal ejecute el siguiente comando:
+Use the kubectl logs command to examine the NGINX log generated by the curl commands executed above. In the terminal, run the following command:
 ```
 kubectl logs $FRONTEND_POD_NAME nginx
 ```
-Utilice el comando kubectl logs para examinar el registro FLASK generado por los comandos curl ejecutados anteriormente. En el terminal ejecute el siguiente comando:
+Use the kubectl logs command to examine the FLASK log generated by the curl commands executed above. In the terminal, run the following command:
 ```
 kubectl logs $FRONTEND_POD_NAME flask
 ```
 
 # Paso 6 Crear proyecto de Helm
 
-Para empezar, navegue hacia arriba en un directorio hasta el directorio:
-´
+To start, navigate up one directory to the directory:
+```
 cd ..
-´
-Utilice el comando helm create para generar un nuevo proyecto de gráﬁco de Helm denominado test-app. En el terminal ejecute el siguiente comando:
-´
+```
+Use the helm create command to generate a new Helm chart project named test-app. In the terminal, run the following command:
+```
 helm create test-app
-´
-Utilice el comando de árbol para renderizar la estructura de directorios en la pantalla. En el terminal ejecute el siguiente comando:
-´
+```
+Use the tree command to render the directory structure on the screen. In the terminal run the following command:
+```
 tree test-app/
-´
-Utilice el comando helm template para convertir las plantillas de Helm en un único archivo de maniﬁesto de Kubernetes implementable. En el terminal ejecute el siguiente comando:
-´
+```
+Use the helm template command to convert Helm templates into a single deployable Kubernetes manifest file. In the terminal, run the following command:
+```
 helm template test-app/
-´
-En este paso, aprendió a usar el método Helm
+```
+In this step, you learned how to use the Helm method
 
-# Paso 7 Actualización de la implementación para usar plantillas de Helm
+# Step 7 Update the deployment to use Helm templates
 
-#En este escenario, el gráﬁco de Helm de la aplicación proporcionado se ha conﬁgurado para crear una implementación que inicia un solo pod que contiene dos contenedores. El primer contenedor es un contenedor de servidor web NGINX que envía las solicitudes HTTP entrantes a un segundo contenedor que ejecuta una aplicación web basada en FLASK (basada en la imagen de Docker que creó anteriormente). 
+In this scenario, the provided application Helm chart has been configured to create a deployment that launches a single pod containing two containers. The first container is an NGINX web server container that sends incoming HTTP requests to a second container running a FLASK-based web application (based on the Docker image you created earlier).
 
-Comience por eliminar todos los recursos anteriores iniciados dentro del clúster. Utilice el comando kubectl delete para eliminar los recursos de implementación, pod y servicio creados anteriormente. En el terminal ejecute el siguiente comando:
-´
+Start by deleting all previous resources started within the cluster. Use the kubectl delete command to delete the previously created deployment, pod, and service resources. In the terminal run the following command:
+```
 kubectl delete deploy,pods,svc --all
-´
-## En este repo ya estan modificados el archivo values.yaml de Helm y el archivo de deployment.yaml 
+```
+## In this repo the Helm values.yaml file and the deployment.yaml file are already modified
 
-Utilice el comando helm template para generar un archivo de maniﬁesto desplegable. En el terminal ejecute el siguiente comando:
-´
+Use the helm template command to generate a deployable manifest file. In the terminal, run the following command:
+```
 helm template ./app
-´
-Con este comando SOLO generó el maniﬁesto implementable, aún no se ha implementado en el clúster, esto es útil para validar el maniﬁesto resultante ANTES de implementarlo realmente.
+```
+With this command you ONLY generated the deployable manifest, it has not been deployed to the cluster yet, this is useful to validate the resulting manifest BEFORE actually deploying it.
 
-Esta vez realizará la implementación real en el clúster. Para ello, volverá a utilizar el comando helm template para generar un archivo de maniﬁesto implementable, canalizando la salida (maniﬁesto) directamente al comando kubectl apply. En el terminal ejecute el siguiente comando:
-´
-helm template cloudacademy ./app | kubectl apply -f -
-´
-Examine los servicios actuales disponibles dentro del clúster. En el terminal ejecute el siguiente comando:
-´
+This time you will perform the actual deployment to the cluster. To do this, you will again use the helm template command to generate a deployable manifest file, piping the output (manifest) directly to the kubectl apply command. In the terminal run the following command:
+```
+helm template kikis ./app | kubectl apply -f -
+```
+Examine the current services available within the cluster. In the terminal run the following command:
+```
 kubectl get svc
-´
-Extraiga la dirección IP del clúster de cloudacademy-app service y almacénela en una variable denominada CLOUDACADEMY_APP_IP. Hazlo eco de vuelta a la terminal. En el terminal ejecute los siguientes comandos:
-´
-CLOUDACADEMY_APP_IP=`kubectl get service/cloudacademy-app -o jsonpath='{.spec.clusterIP}'`
-echo $CLOUDACADEMY_APP_IP
-´
-Pruebe el servicio cloudacademy-app enviándole una solicitud curl. En el terminal ejecute el siguiente comando:
-´
-curl -i http://$CLOUDACADEMY_APP_IP
-´
-Seguir adelante. Cree copias especíﬁcas de dev y prod del archivo app/values.yaml. En el terminal ejecute el siguiente comando:
-´
+```
+Extract the IP address of the cloudacademy-app service cluster and store it in a variable named KIKIS_APP_IP. Echo it back to the terminal. In the terminal run the following commands:
+```
+KIKIS_APP_IP=`kubectl get service/kikis-app -o jsonpath='{.spec.clusterIP}'`
+echo $KIKIS_APP_IP
+```
+Test the kikis-app service by sending a curl request to it. In the terminal run the following command:
+```
+curl -i http://$KIKIS_APP_IP
+```
+
+```
 cp app/values.yaml app/values.dev.yaml 
 cp app/values.yaml app/values.prod.yaml
-´
-Realice una reimplementación de dev en el clúster haciendo referencia al archivo values.dev.yaml Values dentro del comando helm template, ejecute el siguiente comando:
-´
-helm template cloudacademy -f ./app/values.dev.yaml ./app | kubectl apply -f -
-´
-Vuelva a probar el servicio cloudacademy-app enviándole otra solicitud curl. En el terminal ejecute el siguiente comando:
-´
-curl -i http://$CLOUDACADEMY_APP_IP
-´
-Realice una reimplementación de prod de nuevo en el clúster haciendo referencia al archivo values.prod.yaml Values dentro del comando helm template. En el terminal ejecute el siguiente comando:
-´
-helm template cloudacademy -f ./app/values.prod.yaml ./app | kubectl apply -f -
-´
-Vuelva a probar el servicio cloudacademy-app enviándole otra solicitud de curl. En el terminal ejecute el siguiente comando:
-´
-curl -i http://$CLOUDACADEMY_APP_IP
-´
-Utilice el comando helm para empaquetar la aplicación en un gráﬁco. En el terminal ejecute el siguiente comando:
-´
+```
+Perform a dev redeployment to the cluster by referencing the values.dev.yaml Values ​​file within the helm template command, run the following command:
+```
+helm template kikis -f ./app/values.dev.yaml ./app | kubectl apply -f -
+```
+Retest the cloudacademy-app service by sending another curl request to it. In the terminal run the following command:
+```
+curl -i http://$KIKIS_APP_IP
+```
+Perform a prod redeployment back to the cluster by referencing the values.prod.yaml Values ​​file within the helm template command. In the terminal run the following command:
+```
+helm template kikis -f ./app/values.prod.yaml ./app | kubectl apply -f -
+```
+Retest the cloudacademy-app service by sending it another curl request. In the terminal, run the following command:
+```
+curl -i http://$KIKIS_APP_IP
+```
+Use the helm command to package the application into a graph. In the terminal, run the following command:
+```
 helm package app/
-´
-Realice una lista de directorio para conﬁrmar que el gráﬁco se creó correctamente. En el terminal ejecute el siguiente comando:
-´
+```
+Perform a directory listing to confirm that the graph was created successfully. In the terminal run the following command:
+```
 ls -la
-´
-Antes de instalar el nuevo gráﬁco, invierta (elimine) todos los recursos desplegados anteriormente en Helm. En el terminal ejecute el siguiente comando:
-´
-helm template cloudacademy -f ./app/values.prod.yaml ./app | kubectl delete -f -
-´
-Instale el nuevo gráﬁco. En el terminal ejecute el siguiente comando:
-´
-helm install cloudacademy-app app-0.1.0.tgz
-´
-Enumere todas las versiones actuales de Helm para el contexto actual del espacio de nombres. En el terminal ejecute el siguiente comando:
-´
+```
+Before installing the new chart, revert (remove) all previously deployed resources in Helm. In the terminal, run the following command:
+```
+helm template kikis -f ./app/values.prod.yaml ./app | kubectl delete -f -
+```
+Install the new graphic. In the terminal run the following command:
+```
+helm install kikis-app app-0.1.0.tgz
+```
+List all current versions of Helm for the current namespace context. In the terminal run the following command:
+```
 helm ls
-´
-Muestre la implementación, el pod y los recursos de servicio que se crearon debido a la instalación del gráﬁco de Helm. En el terminal ejecute el siguiente comando:
-´
+```
+Show the deployment, pod, and service resources that were created due to the Helm chart installation. In the terminal, run the following command:
+```
 kubectl get deploy,pods,svc
-´
-Pruebe el servicio cloudacademy-app enviándole una solicitud curl. En el terminal ejecute el siguiente comando:
-´
-curl -i http://$CLOUDACADEMY_APP_IP
-´
+```
+Test the cloudacademy-app service by sending a curl request to it. In the terminal run the following command:
+```
+curl -i http://$KIKIS_APP_IP
+```
 
-La implementación consistió en un solo pod que contenía dos contenedores. El primer contenedor era un contenedor de servidor web NGINX que redirigía las solicitudes HTTP entrantes a un segundo contenedor que ejecutaba una aplicación web basada en FLASK, basada en la imagen de Docker que creó en el primer paso de laboratorio. Utilizamos yaml como archivo de valores para externalizar variables de tiempo de ejecución, asegurándose de que sus plantillas de Helm sean reutilizables en diferentes entornos, en este caso entornos dev y prod, a través de los archivos values.dev.yaml y values.prod.yaml respectivamente. 
+The deployment consisted of a single pod containing two containers. The first container was an NGINX web server container that redirected incoming HTTP requests to a second container running a FLASK-based web application, based on the Docker image you created in the first lab step. We used yaml as a values ​​file to externalize runtime variables, ensuring that your Helm templates are reusable across different environments, in this case dev and prod environments, via the values.dev.yaml and values.prod.yaml files respectively.
 
 ## Code of conduct
 
